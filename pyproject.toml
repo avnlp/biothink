@@ -1,0 +1,127 @@
+[build-system]
+requires = ["uv_build>=0.7.20,<0.8.0"]
+build-backend = "uv_build"
+
+[project]
+name = "biothink"
+version = "0.1.0"
+description = "Train LLMs with reasoning capabilities, self-reflection and context grading on biomedical data."
+readme = "README.md"
+requires-python = ">=3.10,<=3.12"
+license = "MIT"
+keywords = []
+authors = [
+    { name = "Ashwin Mathur", email = "" },
+    { name = "Varun Mathur", email = "" },
+]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python",
+]
+dependencies = [
+    "datasets",
+    "deepeval",
+    "tenacity",
+    "trl",
+    "unsloth",
+    "vllm",
+    "tqdm",
+]
+
+[dependency-groups]
+dev = [
+    "black",
+    "mypy",
+    "ruff",
+]
+
+[project.urls]
+Documentation = "https://github.com/avnlp/biothink#readme"
+Issues = "https://github.com/avnlp/biothink/issues"
+Source = "https://github.com/avnlp/biothink"
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+    "A",
+    "ARG",
+    "B",
+    "C",
+    "D",
+    "D401",
+    "DTZ",
+    "E",
+    "EM",
+    "F",
+    "I",
+    "ICN",
+    "ISC",
+    "N",
+    "PLC",
+    "PLE",
+    "PLR",
+    "PLW",
+    "Q",
+    "RUF",
+    "S",
+    "T",
+    "TID",
+    "UP",
+    "W",
+    "YTT",
+]
+ignore = [
+    "ARG001", # Allow unused kwargs in functions
+    # Allow non-abstract empty methods in abstract base classes
+    "B027",
+    # Allow boolean positional values in function calls, like `dict.get(... True)`
+    "FBT003",
+    # Ignore checks for possible passwords
+    "S105",
+    "S106",
+    "S107",
+    # Ignore complexity
+    "C901",
+    "PLR2004", # Allow Magic value used in comparison
+    "PLR0911",
+    "PLR0912",
+    "PLR0913",
+    "PLR0915",
+    # Allow print statements
+    "T201",
+    # Ignore missing module docstrings
+    "D100",
+    "D103",
+    "D104",
+    # Ignore Line too long
+    "E501",
+]
+unfixable = [
+    # Don't touch unused imports
+    "F401",
+]
+extend-select = ["I"]
+
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.isort]
+known-first-party = ["biothink"]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "parents"
+
+[tool.ruff.lint.per-file-ignores]
+# Tests can use magic values, assertions, and relative imports
+"tests/**/*" = ["PLR2004", "S101", "TID252"]
+
+[tool.black]
+line-length = 120
+
+[[tool.mypy.overrides]]
+module = ["biothink.*", "pytest.*", "numpy.*"]
+ignore_missing_imports = true
