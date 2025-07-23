@@ -1,0 +1,29 @@
+"""Training parameters for BioThink."""
+
+MODEL_NAME = "unsloth/Qwen3-4B-unsloth-bnb-4bit"
+MAX_SEQ_LENGTH = 10240
+LORA_RANK = 32
+GPU_MEMORY_UTILIZATION = 0.7
+
+TEMPERATURE = 0.6
+TOP_K = 20
+TOP_P = 0.95
+MIN_P = 0
+MAX_NEW_TOKENS = 1500
+
+LEARNING_RATE = 5e-6
+WEIGHT_DECAY = 0.01
+WARMUP_RATIO = 0.1
+LR_SCHEDULER_TYPE = "cosine"
+OPTIM = "adamw_8bit"
+LOGGING_STEPS = 1
+PER_DEVICE_TRAIN_BATCH_SIZE = 1
+GRADIENT_ACCUMULATION_STEPS = 1
+NUM_GENERATIONS = 4
+MAX_STEPS = 100
+SAVE_STEPS = 5
+REPORT_TO = "wandb"
+OUTPUT_DIR = "outputs"
+
+DATASET_NAME = "avnlp/self_biorag_processed_subset"
+SPLIT = "validation"
