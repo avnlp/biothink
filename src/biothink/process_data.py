@@ -1,4 +1,5 @@
-"""Process Self-BioRAG Dataset.
+"""
+Process Self-BioRAG Dataset.
 
 This module provides functionality to process and extract structured information from
 Self-BioRAG dataset text outputs. The dataset contains text with specific token-based
