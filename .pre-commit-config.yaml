@@ -1,3 +1,5 @@
+fail_fast: true
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
@@ -19,10 +21,10 @@ repos:
       args: [--unsafe]
     - id: check-toml
 
-  - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.11.14
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
     hooks:
-      - id: uv-lock
+      - id: gitleaks
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: 'v0.15.13'
@@ -33,29 +35,31 @@ repos:
     - id: ruff-format
       types_or: [python, jupyter]
 
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v2.1.0
+  - repo: https://github.com/PyCQA/bandit
+    rev: "1.9.4"
+    hooks:
+    - id: bandit
+      args: ["-c", "pyproject.toml", "-r", "--severity-level", "high", "--confidence-level", "high", "--exit-zero", "src/"]
+      additional_dependencies: ["bandit[toml]"]
+
+  - repo: local
     hooks:
     - id: mypy
-      entry: python3 -m mypy --config-file pyproject.toml
+      name: mypy
+      entry: uv run mypy src/
       language: system
       types: [python]
-      exclude: "data"
+      pass_filenames: false
 
   - repo: https://github.com/crate-ci/typos
-    rev: v1
+    rev: v1.46.2
     hooks:
       - id: typos
-        exclude: ^data/
 
 ci:
-    autofix_commit_msg: |
-        [pre-commit.ci] Add auto fixes from pre-commit.com hooks
-
-        for more information, see https://pre-commit.ci
-    autofix_prs: true
-    autoupdate_branch: ''
-    autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
-    autoupdate_schedule: weekly
-    skip: [mypy]
-    submodules: false
+  autofix_prs: true
+  autofix_commit_msg: "ci: Auto fixes from pre-commit"
+  autofix_prs_limit: 5
+  autoupdate_schedule: monthly
+  autoupdate_commit_msg: "ci: Pre-commit autoupdate"
+  skip: [mypy]
