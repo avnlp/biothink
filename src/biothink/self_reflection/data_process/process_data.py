@@ -204,6 +204,7 @@ def process_dataset(dataset, remove_original_output=False):
         lambda x: "[No Retrieval]" not in x.get("output", "")
         and "[Continue to Use Evidence]" not in x.get("output", "")
         and x.get("output", "").startswith("[Retrieval]"),
+        num_proc=4,
     )
 
     print(f"Dataset size after filtering: {len(filtered)} (was {len(dataset)})")
