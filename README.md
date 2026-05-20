@@ -1,7 +1,18 @@
-# BioThink: Self-Reflective Reasoning for Biomedical QA
+<h1 align="center">BioThink: Self-Reflective Reasoning for Biomedical Question Answering</h1>
+
+<div align="center">
+
+[![DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/avnlp/biothink)
+[![CI](https://img.shields.io/github/actions/workflow/status/avnlp/biothink/ci.yml?branch=main&label=CI&logo=githubactions)](https://github.com/avnlp/biothink/actions/workflows/ci.yml)
+[![Ruff](https://img.shields.io/github/actions/workflow/status/avnlp/biothink/ci.yml?branch=main&label=Ruff&logo=ruff)](https://github.com/avnlp/biothink/actions/workflows/ci.yml)
+[![MyPy](https://img.shields.io/github/actions/workflow/status/avnlp/biothink/ci.yml?branch=main&label=MyPy&logo=python)](https://github.com/avnlp/biothink/actions/workflows/ci.yml)
+[![Bandit](https://img.shields.io/github/actions/workflow/status/avnlp/biothink/ci.yml?branch=main&label=Bandit&logo=owasp)](https://github.com/avnlp/biothink/actions/workflows/ci.yml)
+[![License](https://img.shields.io/github/license/avnlp/biothink?color=green)](https://github.com/avnlp/biothink/blob/main/LICENSE)
 
 [![Model](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Model-yellow)](https://huggingface.co/avnlp/BioThink-Qwen3-1.7B)
 [![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Dataset-green)](https://huggingface.co/datasets/avnlp/self_biorag_processed)
+
+</div>
 
 ## Introduction
 
@@ -24,16 +35,27 @@ Inspired by [Self-RAG](https://arxiv.org/abs/2310.11511) and building upon [Self
   - Faithfulness and relevancy of the answer
 - **Efficiency**: The model is trained using QLoRA and Unsloth for efficient fine-tuning.
 
+## Quick Start
+
+Install dependencies and run the main BioThink workflow scripts:
+
+```bash
+make sync
+uv run python src/biothink/self_reflection/data_process/process_data.py
+uv run python src/biothink/self_reflection/train.py
+uv run python src/biothink/self_reflection/inference/inference_biothink_qwen3.py
+```
+
 ## Training Steps
 
 ### 1. Data Processing
 
- The [Self-BioRAG dataset](https://github.com/dmis-lab/self-biorag) is processed using the script [process_data.py](src/biothink/process_data.py). This script extracts questions, answers, and context, and also prepares labels for groundness, relevance, and utility tokens.
+ The [Self-BioRAG dataset](https://github.com/dmis-lab/self-biorag) is processed using the script [process_data.py](src/biothink/self_reflection/data_process/process_data.py). This script extracts questions, answers, and context, and also prepares labels for groundness, relevance, and utility tokens.
  The processed dataset is available at [avnlp/self_biorag_processed](https://huggingface.co/datasets/avnlp/self_biorag_processed).
 
 ### 2. Model Training
 
- The model is trained using the script [train_rag.py](src/biothink/train_rag.py). The training process involves:
+ The model is trained using the script [train.py](src/biothink/self_reflection/train.py). The training process involves:
 
 **Structured Generation**: The model is trained to generate outputs in the following format:
 
@@ -69,6 +91,8 @@ Inspired by [Self-RAG](https://arxiv.org/abs/2310.11511) and building upon [Self
 We fine-tune the `Qwen-3-1.7B` model using GRPO and QLoRA. The trained model is available on Hugging Face:
 [avnlp/BioThink-Qwen3-1.7B](https://huggingface.co/avnlp/BioThink-Qwen3-1.7B).
 
+Training defaults are defined in [train_config.py](src/biothink/self_reflection/train_config.py). Set the model choice, dataset source, LoRA parameters, and GRPO settings before launching a run.
+
 ### 4. Evaluation
 
  The model is evaluated using the following metrics:
@@ -80,3 +104,50 @@ We fine-tune the `Qwen-3-1.7B` model using GRPO and QLoRA. The trained model is 
 5. **Answer Correctness**: Checks that the answer is correct using DeepEval's GEval metric with a custom instruction for LLM-as-a-Judge.
 6. **Faithfulness**: Checks that the answer is faithful to the provided context using DeepEval's Faithfulness LLM-as-a-Judge metric.
 7. **Answer Relevancy**: Checks that the answer is relevant to the original question using DeepEval's Answer Relevancy LLM-as-a-Judge metric.
+
+## Repository Structure
+
+```text
+src/biothink/
+├── __init__.py
+└── self_reflection/
+    ├── __init__.py
+    ├── data_process/
+    │   ├── __init__.py
+    │   ├── process_data.py
+    │   └── subset_data.py
+    ├── evaluation/
+    │   ├── __init__.py
+    │   ├── evaluate_biothink_qwen3.py
+    │   ├── evaluate_qwen3.py
+    │   └── metrics.py
+    ├── inference/
+    │   ├── __init__.py
+    │   ├── inference_biothink_qwen3.py
+    │   └── inference_qwen3.py
+    ├── prompts.py
+    ├── reward_functions.py
+    ├── train.py
+    └── train_config.py
+```
+
+## Development
+
+Run the local quality checks with:
+
+```bash
+make lint-check
+make lint-typing
+make lint-typos
+```
+
+Security checks are available with:
+
+```bash
+make security-bandit
+make security-audit
+```
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
