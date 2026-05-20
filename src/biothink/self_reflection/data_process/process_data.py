@@ -201,12 +201,9 @@ def process_dataset(dataset, remove_original_output=False):
     # First, filter out rows with unwanted tokens to avoid multiprocessing issues
     print("Filtering dataset to remove unwanted tokens...")
     filtered = dataset.filter(
-        lambda x: (
-            "[No Retrieval]" not in x.get("output", "")
-            and "[Continue to Use Evidence]" not in x.get("output", "")
-            and x.get("output", "").startswith("[Retrieval]")
-        ),
-        num_proc=4,
+        lambda x: "[No Retrieval]" not in x.get("output", "")
+        and "[Continue to Use Evidence]" not in x.get("output", "")
+        and x.get("output", "").startswith("[Retrieval]"),
     )
 
     print(f"Dataset size after filtering: {len(filtered)} (was {len(dataset)})")
