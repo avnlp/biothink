@@ -1,0 +1,8 @@
+[default.extend-words]
+BioRAG = "BioRAG"
+BioThink = "BioThink"
+GRPO = "GRPO"
+Qwen = "Qwen"
+
+[files]
+extend-exclude = ["data/**", "*.json", "*.txt"]

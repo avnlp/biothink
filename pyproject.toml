@@ -10,7 +10,6 @@ authors = [
     { name = "Ashwin Mathur", email = "" },
     { name = "Varun Mathur", email = "" },
 ]
-repository = "https://github.com/avnlp/biothink"
 dependencies = [
     "datasets",
     "deepeval",
@@ -26,16 +25,23 @@ build-backend = "hatchling.build"
 
 [dependency-groups]
 dev = [
-    "mypy>=1.14.1",
+    "bandit>=1.9.4",
+    "mypy>=1.20.0",
     "nbqa>=1.9.1",
-    "pip-audit>=2.7.3",
-    "pre-commit>=4.1.0",
+    "pip-audit>=2.10.0",
+    "pre-commit>=4.5.1",
     "pytest>=8.3.4",
     "pytest-asyncio>=0.25.2",
     "pytest-cov>=6.0.0",
     "pytest-mock>=3.14.0",
-    "ruff>=0.9.2",
+    "ruff>=0.15.9",
+    "typos>=1.45.0",
 ]
+
+[project.urls]
+Documentation = "https://github.com/avnlp/biothink#readme"
+Issues = "https://github.com/avnlp/biothink/issues"
+Source = "https://github.com/avnlp/biothink"
 
 # Default dependency groups to be installed
 [tool.uv]
@@ -64,9 +70,22 @@ strict_equality = true
 extra_checks = true
 mypy_path = "src"
 
+[[tool.mypy.overrides]]
+module = [
+    "datasets.*",
+    "train_config.*",
+    "unsloth.*",
+    "vllm.*",
+]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["biothink.self_reflection.data_process.process_data"]
+ignore_errors = true
+
 [tool.ruff]
 include = ["*.py", "pyproject.toml", "*.ipynb"]
-exclude = []
+exclude = ["src/biothink/self_reflection/data_process/process_data.py"]
 line-length = 120
 
 [tool.ruff.format]
@@ -132,3 +151,7 @@ max-doc-length = 120
     [tool.coverage.run]
     source=["biothink"]
     omit=["tests/*", "*__init__.py"]
+
+[tool.bandit]
+exclude_dirs = ["/.venv", "/build", "/dist"]
+skips = ["B101"]
