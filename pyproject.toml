@@ -34,8 +34,8 @@ dev = [
     "pytest-asyncio>=0.25.2",
     "pytest-cov>=6.0.0",
     "pytest-mock>=3.14.0",
-    "ruff>=0.15.20",
-    "typos>=1.48.0",
+    "ruff>=0.16.1",
+    "typos>=1.49.0",
 ]
 
 [project.urls]
