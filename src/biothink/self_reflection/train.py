@@ -124,7 +124,7 @@ if __name__ == "__main__":
     training_args = GRPOConfig(
         learning_rate=LEARNING_RATE,
         weight_decay=WEIGHT_DECAY,
-        warmup_ratio=WARMUP_RATIO,
+        warmup_steps=WARMUP_RATIO,
         lr_scheduler_type=LR_SCHEDULER_TYPE,
         optim=OPTIM,
         logging_steps=LOGGING_STEPS,
@@ -143,8 +143,8 @@ if __name__ == "__main__":
         model=model,
         processing_class=tokenizer,
         reward_funcs=[
-            correctness_reward_func,  # type: ignore[list-item]
-            xml_structure_reward_func,  # type: ignore[list-item]
+            correctness_reward_func,
+            xml_structure_reward_func,
             utility_reward_func,
             relevance_reward_func,
             groundness_reward_func,

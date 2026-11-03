@@ -183,7 +183,7 @@ def evaluate_answer_correctness(question: str, answer: str, expected_answer: str
     return correctness_metric.score if correctness_metric.score is not None else 0.0
 
 
-def correctness_reward_func(completions: list, instruction: str, answer: str, **kwargs: Any) -> list[float]:
+def correctness_reward_func(completions: list, instruction: str, answer: str, **kwargs: Any) -> list[float | None]:
     """Reward function that evaluates answer correctness.
 
     Args:
@@ -196,7 +196,7 @@ def correctness_reward_func(completions: list, instruction: str, answer: str, **
         List of scaled reward scores (range: 1-20) for each completion
     """
     responses = [completion[0]["content"] for completion in completions]
-    scores = []
+    scores: list[float | None] = []
 
     for response in responses:
         # Get base correctness score (0.0-1.0)
@@ -208,7 +208,7 @@ def correctness_reward_func(completions: list, instruction: str, answer: str, **
     return scores
 
 
-def xml_structure_reward_func(completions: list, **kwargs: Any) -> list[float]:
+def xml_structure_reward_func(completions: list, **kwargs: Any) -> list[float | None]:
     """Reward function that evaluates XML structure compliance.
 
     Args:
@@ -219,7 +219,7 @@ def xml_structure_reward_func(completions: list, **kwargs: Any) -> list[float]:
         List of scaled reward scores (range: 1-10) for each completion
     """
     responses = [completion[0]["content"] for completion in completions]
-    scores = []
+    scores: list[float | None] = []
 
     for response in responses:
         structure_scores = evaluate_xml_structure(response)
@@ -230,7 +230,7 @@ def xml_structure_reward_func(completions: list, **kwargs: Any) -> list[float]:
     return scores
 
 
-def relevance_reward_func(completions: list, relevance: list, **kwargs: Any) -> list[float]:
+def relevance_reward_func(completions: list, relevance: list, **kwargs: Any) -> list[float | None]:
     """Reward function that evaluates relevance token accuracy.
 
     Args:
@@ -242,7 +242,7 @@ def relevance_reward_func(completions: list, relevance: list, **kwargs: Any) -> 
         List of scaled reward scores (range: 1-50) for each completion
     """
     responses = [completion[0]["content"] for completion in completions]
-    scores = []
+    scores: list[float | None] = []
 
     for i, response in enumerate(responses):
         # Extract and compare relevance tokens
@@ -256,7 +256,7 @@ def relevance_reward_func(completions: list, relevance: list, **kwargs: Any) -> 
     return scores
 
 
-def groundness_reward_func(completions: list, groundness: list, **kwargs: Any) -> list[float]:
+def groundness_reward_func(completions: list, groundness: list, **kwargs: Any) -> list[float | None]:
     """Reward function that evaluates groundness token accuracy.
 
     Args:
@@ -268,7 +268,7 @@ def groundness_reward_func(completions: list, groundness: list, **kwargs: Any) -
         List of scaled reward scores (range: 1-50) for each completion
     """
     responses = [completion[0]["content"] for completion in completions]
-    scores = []
+    scores: list[float | None] = []
 
     for i, response in enumerate(responses):
         # Extract and compare groundness tokens
@@ -282,7 +282,7 @@ def groundness_reward_func(completions: list, groundness: list, **kwargs: Any) -
     return scores
 
 
-def utility_reward_func(completions: list, utility: list, **kwargs: Any) -> list[float]:
+def utility_reward_func(completions: list, utility: list, **kwargs: Any) -> list[float | None]:
     """Reward function that evaluates utility rating accuracy.
 
     Args:
@@ -294,7 +294,7 @@ def utility_reward_func(completions: list, utility: list, **kwargs: Any) -> list
         List of scaled reward scores (range: 1-100) for each completion
     """
     responses = [completion[0]["content"] for completion in completions]
-    scores = []
+    scores: list[float | None] = []
 
     for i, response in enumerate(responses):
         # Extract and compare utility ratings
